@@ -1,4 +1,4 @@
-package com.baizhi.dao;
+﻿package com.baizhi.dao;
 
 import com.baizhi.entity.Album;
 import org.apache.ibatis.annotations.Param;
@@ -19,4 +19,6 @@ public interface AlbumDao {
     //根据id查询单个
     public Album      findById(String   id);
      public Album     delete(String   id);
+
+      public Album     update(String   id);
 }
