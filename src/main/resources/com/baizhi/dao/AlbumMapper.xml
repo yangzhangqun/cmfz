@@ -1,0 +1,64 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.AlbumDao">
+    <delete id="deleteAlbum">
+        delete from album where id in
+        <foreach collection="array" open="(" item="id" close=")" separator=",">
+            #{id}
+        </foreach>
+    </delete>
+    <update id="updateAlbum">
+        update album
+        <set>
+            <if test="title!=null">
+                title=#{title},
+            </if>
+            <if test="score!=null">
+                score=#{score},
+            </if>
+            <if test="author!=null">
+                author=#{author},
+            </if>
+            <if test="brodcast!=null">
+                brodcast=#{brodcast},
+            </if>
+            <if test="count!=null">
+                count=#{count},
+            </if>
+            <if test="brief!=null">
+                brief=#{brief},
+            </if>
+            <if test="publicTime!=null">
+                publicTime=#{publicTime},
+            </if>
+            <if test="coverImg!=null">
+                coverImg=#{coverImg},
+            </if>
+            <if test="status!=null">
+                status=#{status}
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+    <select id="showAll" resultType="album">
+        select *
+        from album limit
+             ${(page-1)*rows},
+             #{rows}
+    </select>
+    <select id="selectTotalCount" resultType="Integer">
+        select count(*)
+        from album
+    </select>
+    <insert id="savebAlbum">
+        insert into album(id, title, score, author, brodcast, count, brief, publicTime, coverImg, status)
+        values (#{id}, #{title}, #{score}, #{author}, #{brodcast}, #{count}, #{brief}, #{publicTime}, #{coverImg},
+                #{status})
+    </insert>
+    <select id="findById" resultType="Album">
+        select *
+        from album
+        where id = #{id}
+    </select>
+</mapper>

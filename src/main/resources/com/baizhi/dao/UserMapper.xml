@@ -1,0 +1,104 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd" >
+
+<mapper namespace="com.baizhi.dao.UserDao">
+    <select id="showAll" resultType="user">
+        select *
+        from user limit
+             ${(page-1)*rows},
+             #{rows}
+    </select>
+    <select id="selectTotalCount" resultType="java.lang.Integer">
+        select count(1)
+        from user
+    </select>
+    <delete id="deleteUser">
+        delete from user where id in
+        <foreach collection="array" separator="," open="(" close=")" item="id">
+            #{id}
+        </foreach>
+    </delete>
+    <insert id="saveUser">
+        insert into user (id, head_pic, dharma, name, sex, province, city, sign, phone_num, password, create_date,
+                          status, salt)
+        values (#{id}, #{head_pic}, #{dharma}, #{name}, #{sex}, #{province}, #{city}, #{sign}, #{phone_num},
+                #{password}, #{create_date}, #{status}, #{salt})
+    </insert>
+    <update id="updateUser">
+        update user
+        <set>
+            <if test="head_pic">
+                head_pic=#{head_pic},
+            </if>
+            <if test="dharma">
+                dharma=#{dharma},
+            </if>
+            <if test="name">
+                name=#{name},
+            </if>
+            <if test="sex">
+                sex=#{sex},
+            </if>
+            <if test="province">
+                province=#{province},
+            </if>
+            <if test="city">
+                city=#{city},
+            </if>
+            <if test="sign">
+                sign=#{sign},
+            </if>
+            <if test="phone_num">
+                phone_num=#{phone_num},
+            </if>
+            <if test="password">
+                password=#{password},
+            </if>
+            <if test="create_date">
+                create_date=#{create_date},
+            </if>
+            <if test="status">
+                status=#{status},
+            </if>
+            <if test="salt">
+                salt=#{salt},
+            </if>
+        </set>
+        where id=#{id}
+    </update>
+
+<select id="getAll" resultType="user">
+    select   *   from     user
+</select>
+    <select id="findById" resultType="user">
+        select   *   from    user   where   id=#{id}
+    </select>
+    <select id="queryTime" resultType="qi">
+        select a.click_date,ifnull(b.count,0) as count
+        from (
+            SELECT curdate() as click_date
+            union all
+            SELECT date_sub(curdate(), interval 1 day) as click_date
+            union all
+            SELECT date_sub(curdate(), interval 2 day) as click_date
+            union all
+            SELECT date_sub(curdate(), interval 3 day) as click_date
+            union all
+            SELECT date_sub(curdate(), interval 4 day) as click_date
+            union all
+            SELECT date_sub(curdate(), interval 5 day) as click_date
+            union all
+            SELECT date_sub(curdate(), interval 6 day) as click_date
+            ) a left join (
+            select date(create_date) as datetime, count(*) as count
+            from user
+            group by date(create_date)
+            ) b on a.click_date = b.datetime;
+    </select>
+<select id="getTime" resultType="month">
+    select month(create_date)as yue ,count(1)as count from user group by month(create_date)
+</select>
+<select id="getProvince"  resultType="Province">
+    SELECT province as name,count(1) as value from user  GROUP BY province
+</select>
+</mapper>
