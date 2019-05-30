@@ -18,4 +18,5 @@ public interface AlbumDao {
     public   void  savebAlbum(Album  album);
     //根据id查询单个
     public Album      findById(String   id);
+     public Album     delete(String   id);
 }
